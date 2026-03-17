@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <!-- viewport: hanya untuk desktop landscape, tidak perlu mobile scaling -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NexusPlay — Universal Emulator Hub</title>
+
+  <!-- Google Fonts: Oxanium = futuristic display, Share Tech Mono = terminal mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@300;400;600;700;800&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ╔══════════════════════════════════════════╗
+       ║  APP SHELL — Tata letak utama aplikasi   ║
+       ╚══════════════════════════════════════════╝ -->
+  <div id="app">
+
+    <!-- ── HEADER ─────────────────────────────── -->
+    <header id="header">
+      <div class="logo">
+        <span class="logo-icon">◈</span>
+        <span class="logo-text">NEXUS<em>PLAY</em></span>
+      </div>
+      <div class="header-center">
+        <span id="platform-breadcrumb">SELECT PLATFORM</span>
+      </div>
+      <div class="header-right">
+        <!-- Indikator gamepad: inactive by default, JS akan update -->
+        <div id="gamepad-status" class="status-badge inactive">
+          <span class="badge-dot"></span>
+          <span id="gamepad-badge-text">NO GAMEPAD</span>
+        </div>
+        <div id="clock">00:00</div>
+      </div>
+    </header>
+
+    <!-- ── MAIN LAYOUT ─────────────────────────── -->
+    <main id="main">
+
+      <!-- Kiri: Daftar Platform -->
+      <nav id="sidebar" aria-label="Platform selection">
+        <div class="sidebar-label">PLATFORMS</div>
+        <ul id="platform-list" role="listbox" aria-label="Choose a platform">
+          <!-- Diisi oleh script.js -->
+        </ul>
+      </nav>
+
+      <!-- Kanan: Grid Game -->
+      <section id="game-section">
+        <div id="section-header">
+          <div id="platform-info">
+            <span id="platform-fullname">—</span>
+            <span id="platform-year-badge"></span>
+          </div>
+          <div id="game-count"></div>
+        </div>
+
+        <!-- Grid game; hidden class dihapus saat platform dipilih -->
+        <div id="game-grid" role="grid" class="hidden">
+          <!-- Diisi oleh script.js -->
+        </div>
+
+        <!-- Pesan saat belum ada platform yang dipilih -->
+        <div id="empty-hint">
+          <div class="empty-inner">
+            <span class="empty-arrow">←</span>
+            <span>PILIH PLATFORM UNTUK MELIHAT GAME</span>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- ── FOOTER — Petunjuk Kontrol ─────────── -->
+    <footer id="controls-bar">
+      <div class="ctrl-group"><kbd>↑</kbd><kbd>↓</kbd> <span>Navigate</span></div>
+      <div class="ctrl-group"><kbd>←</kbd><kbd>→</kbd> <span>Switch Panel</span></div>
+      <div class="ctrl-group"><kbd>Enter</kbd> <span>Launch</span></div>
+      <div class="ctrl-group"><kbd>Esc</kbd> <span>Back</span></div>
+      <div class="ctrl-sep"></div>
+      <div class="ctrl-group"><span class="ctrl-icon">🎮</span> <span>Gamepad Ready</span></div>
+    </footer>
+
+  </div><!-- /#app -->
+
+
+  <!-- ╔══════════════════════════════════════════╗
+       ║  LAUNCH MODAL — Pilih cara main game     ║
+       ╚══════════════════════════════════════════╝ -->
+  <div id="launch-modal" class="overlay hidden" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <!-- Backdrop: klik di sini untuk tutup modal -->
+    <div class="modal-backdrop" id="modal-backdrop"></div>
+
+    <div class="modal-glass">
+      <div id="modal-platform-tag">▸ PLATFORM</div>
+      <h2 id="modal-title">Game Title</h2>
+      <div class="modal-chips">
+        <span class="chip" id="modal-genre">Genre</span>
+        <span class="chip" id="modal-year">Year</span>
+      </div>
+      <p class="modal-desc">Pilih cara memainkan game ini:</p>
+      <div class="modal-buttons">
+        <button id="btn-new-tab" class="modal-btn primary">
+          <span class="btn-icon">⊳</span>
+          <span>Buka di Tab Baru</span>
+        </button>
+        <button id="btn-embed" class="modal-btn secondary">
+          <span class="btn-icon">⊞</span>
+          <span>Embed di Halaman Ini</span>
+        </button>
+        <button id="btn-cancel" class="modal-btn ghost">
+          <span class="btn-icon">✕</span>
+          <span>Batal</span>
+        </button>
+      </div>
+      <p class="modal-note">⚠ Emulator pihak ketiga mungkin memerlukan upload ROM secara terpisah.</p>
+    </div>
+  </div>
+
+
+  <!-- ╔══════════════════════════════════════════╗
+       ║  EMBED OVERLAY — Jalankan game di iframe  ║
+       ╚══════════════════════════════════════════╝ -->
+  <div id="embed-overlay" class="overlay hidden">
+    <div id="embed-topbar">
+      <span id="embed-title">▶ Game Title</span>
+      <div class="embed-actions">
+        <button id="btn-fullscreen-embed" class="embed-btn">⛶ Fullscreen</button>
+        <button id="btn-exit-embed" class="embed-btn exit">✕ Exit</button>
+      </div>
+    </div>
+    <!-- sandbox: izin minimum agar emulator bisa jalan -->
+    <iframe id="game-frame" src="about:blank" allowfullscreen
+            sandbox="allow-scripts allow-same-origin allow-forms allow-popups"></iframe>
+  </div>
+
+
+  <script src="script.js"></script>
+</body>
+</html>
